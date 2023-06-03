@@ -13,7 +13,7 @@ path2 = "D:/数据分析/python实战/母婴/tianchi_mum_baby_trade_history.csv"
 read_data1 = pd.read_csv(path1)
 read_data2 = pd.read_csv(path2)
 
-#数据预处理,用户分析
+#数据预处理,设置正确的日期格式
 read_data1["birthday"] =pd.to_datetime(read_data1.birthday.astype('str'))
 
 #剔除性别未知
@@ -34,7 +34,7 @@ read_data2 = read_data2[(read_data2.buy_mount >= 1) & (read_data2.buy_mount <= 1
 
 # print(read_data2)
 #
-# 按照月份分组，计算每月的购买人数
+"""按照月份分组，计算每月的购买人数"""
 # grouped = read_data2.groupby('quarter')['user_id'].nunique()
 #
 # # 绘制直方图
@@ -49,21 +49,42 @@ read_data2 = read_data2[(read_data2.buy_mount >= 1) & (read_data2.buy_mount <= 1
 # plt.show()
 # 显示图形
 
-#统计购买次数
+"""查看11月内每天的销售情况"""
+# read_data2 = read_data2[read_data2["month"]==11]
+# read_data2["everyday"] = read_data2["day"].dt.day
+# grouped = read_data2.groupby('everyday')['buy_mount'].sum()
+#
+# # 绘制直方图
+# plt.bar(grouped.index, grouped.values)
+#
+# # 设置图表标题和轴标签
+# plt.title('quarter Purchase User Count')
+# plt.xlabel('quarter')
+# plt.ylabel('User Count')
+#
+# # 展示图表
+# plt.show()
+
+
+"""统计购买次数"""
 # grouped = read_data2.groupby('buy_mount')['user_id'].count()
 # plt.bar(grouped.index, grouped.values)
 # plt.show()
 
-category_1_stats = read_data2.groupby("category_1")['buy_mount'].sum()
-plt.figure(figsize=(10, 6))
-plt.bar(category_1_stats.index.astype(str),category_1_stats.values)
-plt.title("Sales Volumn by Category")                                               #连接
+""" 查看各大类商品的销售情况"""
+# category_1_stats = read_data2.groupby("category_1")['buy_mount'].sum()
+# plt.figure(figsize=(10, 6))
+# plt.bar(category_1_stats.index.astype(str),category_1_stats.values)
+# plt.title("Sales Volumn by Category")                                               #连接
+#
+# plt.xlabel("Category_1")
+# plt.ylabel('Sales Volumn')                                                          # #统计用户年龄
+# plt.show()
 
-plt.xlabel("Category_1")
-plt.ylabel('Sales Volumn')                                                          # #统计用户年龄
-plt.show()       
-df = pd.merge(read_data2,read_data1)
-# # 统计用户性别
+"""合并数据"""
+# df = pd.merge(read_data2,read_data1)
+
+"""统计用户性别 """
 # gender_counts = df["gender"].value_counts()
 # # 绘制饼图
 # labels = ["Male", "Female"]
