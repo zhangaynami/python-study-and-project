@@ -28,6 +28,7 @@ read_data2['day'] = pd.to_datetime(read_data2.day.astype("str"))
 read_data2['month'] = read_data2['day'].dt.month
 read_data2['quarter'] = read_data2['day'].dt.quarter
 read_data2['year'] = read_data2['day'].dt.year
+
 #剔除购买量异常
 read_data2 = read_data2[(read_data2.buy_mount >= 1) & (read_data2.buy_mount <= 189)]
 
@@ -53,13 +54,32 @@ read_data2 = read_data2[(read_data2.buy_mount >= 1) & (read_data2.buy_mount <= 1
 # plt.bar(grouped.index, grouped.values)
 # plt.show()
 
-#统计用户年龄
-# 统计用户性别
-gender_counts = read_data1["gender"].value_counts()
-# 绘制饼图
-labels = ["Male", "Female"]
-sizes = [gender_counts[0], gender_counts[1]]
-plt.pie(sizes, labels=labels, autopct='%1.1f%%')
-plt.title("Gender Distribution")
-plt.axis('equal')
-plt.show()
+category_1_stats = read_data2.groupby("category_1")['buy_mount'].sum()
+plt.figure(figsize=(10, 6))
+plt.bar(category_1_stats.index.astype(str),category_1_stats.values)
+plt.title("Sales Volumn by Category")                                               #连接
+
+plt.xlabel("Category_1")
+plt.ylabel('Sales Volumn')                                                          # #统计用户年龄
+plt.show()       
+df = pd.merge(read_data2,read_data1)
+# # 统计用户性别
+# gender_counts = df["gender"].value_counts()
+# # 绘制饼图
+# labels = ["Male", "Female"]
+# sizes = [gender_counts[0], gender_counts[1]]
+# plt.pie(sizes, labels=labels, autopct='%1.1f%%')
+# plt.title("Gender Distribution")
+# plt.axis('equal')
+# plt.show()
+
+# 绘制直方图
+# 按照 category_2 列分组，统计每组的销售量
+
+
+
+
+
+
+
+
