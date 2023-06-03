@@ -35,18 +35,18 @@ read_data2 = read_data2[(read_data2.buy_mount >= 1) & (read_data2.buy_mount <= 1
 # print(read_data2)
 #
 """按照月份分组，计算每月的购买人数"""
-# grouped = read_data2.groupby('quarter')['user_id'].nunique()
+# grouped = read_data2.groupby('month')['user_id'].nunique()
 #
 # # 绘制直方图
 # plt.bar(grouped.index, grouped.values)
 #
 # # 设置图表标题和轴标签
-# plt.title('quarter Purchase User Count')
-# plt.xlabel('quarter')
+# plt.title('month Purchase User Count')
+# plt.xlabel('month')
 # plt.ylabel('User Count')
-#
-# # 展示图表
-# plt.show()
+
+# 展示图表
+plt.show()
 # 显示图形
 
 """查看11月内每天的销售情况"""
@@ -72,18 +72,28 @@ read_data2 = read_data2[(read_data2.buy_mount >= 1) & (read_data2.buy_mount <= 1
 # plt.show()
 
 """ 查看各大类商品的销售情况"""
-# category_1_stats = read_data2.groupby("category_1")['buy_mount'].sum()
+# category = read_data2.groupby("category_1")['buy_mount'].sum()
 # plt.figure(figsize=(10, 6))
-# plt.bar(category_1_stats.index.astype(str),category_1_stats.values)
+# plt.bar(category.index.astype(str),category.values)
 # plt.title("Sales Volumn by Category")                                               #连接
 #
 # plt.xlabel("Category_1")
 # plt.ylabel('Sales Volumn')                                                          # #统计用户年龄
 # plt.show()
 
+""" 查看各大类商品下各子类商品的销售情况"""
+# category = read_data2.groupby("category_1")['category_2'].nunique()
+# plt.figure(figsize=(10, 6))
+# plt.bar(category.index.astype(str),category.values)
+# plt.title("Son Category")                                               #连接
+#
+# plt.xlabel("Category")
+# plt.ylabel('Sales Volumn')                                                          # #统计用户年龄
+# plt.show()
+
 """合并数据"""
 # df = pd.merge(read_data2,read_data1)
-
+#
 """统计用户性别 """
 # gender_counts = df["gender"].value_counts()
 # # 绘制饼图
@@ -94,8 +104,7 @@ read_data2 = read_data2[(read_data2.buy_mount >= 1) & (read_data2.buy_mount <= 1
 # plt.axis('equal')
 # plt.show()
 
-# 绘制直方图
-# 按照 category_2 列分组，统计每组的销售量
+
 
 
 
