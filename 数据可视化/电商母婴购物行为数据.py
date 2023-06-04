@@ -33,7 +33,13 @@ read_data2['year'] = read_data2['day'].dt.year
 read_data2 = read_data2[(read_data2.buy_mount >= 1) & (read_data2.buy_mount <= 189)]
 
 # print(read_data2)
-#
+
+"""分季度查看销售情况"""
+# grouped = read_data2.groupby(['year','quarter'])['buy_mount'].sum()
+# print(grouped)
+# plt.bar( [str(idx[0]) + "/Q" + str(idx[1]) for idx in grouped.index], grouped.values)
+# plt.show()
+
 """按照月份分组，计算每月的购买人数"""
 # grouped = read_data2.groupby('month')['user_id'].nunique()
 #
@@ -46,7 +52,7 @@ read_data2 = read_data2[(read_data2.buy_mount >= 1) & (read_data2.buy_mount <= 1
 # plt.ylabel('User Count')
 
 # 展示图表
-plt.show()
+# plt.show()
 # 显示图形
 
 """查看11月内每天的销售情况"""
