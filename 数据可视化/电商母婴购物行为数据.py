@@ -81,14 +81,22 @@ plt.show()
 # plt.ylabel('Sales Volumn')                                                          # #统计用户年龄
 # plt.show()
 
-""" 查看各大类商品下各子类商品的销售情况"""
+# """ 查看各大类商品下各子类商品的销售情况"""
 # category = read_data2.groupby("category_1")['category_2'].nunique()
 # plt.figure(figsize=(10, 6))
 # plt.bar(category.index.astype(str),category.values)
-# plt.title("Son Category")                                               #连接
+# plt.title("Son Category")
 #
 # plt.xlabel("Category")
 # plt.ylabel('Sales Volumn')                                                          # #统计用户年龄
+# plt.show()
+
+"""统计各类别下，子产品的平均销量"""
+# category_buy_mount = read_data2.groupby("category_1")['buy_mount'].sum()
+# son_category = read_data2.groupby("category_1")['category_2'].nunique()
+# avg = category_buy_mount/son_category
+# print(avg)
+# plt.bar(avg.index.astype(str),avg.values)
 # plt.show()
 
 """合并数据"""
@@ -103,13 +111,23 @@ plt.show()
 # plt.title("Gender Distribution")
 # plt.axis('equal')
 # plt.show()
+"""男宝宝消费"""
+# df = pd.merge(read_data2,read_data1)
+# df = df[df["gender"] == 0]
+#
+# f_buy_amount = df.groupby("category_1")["buy_mount"].sum()
+# # print(f_buy_amount)
+# plt.pie(f_buy_amount.values,labels = f_buy_amount.index, autopct='%1.1f%%')
+# plt.show()
 
-
-
-
-
-
-
+"""女宝宝消费"""
+# df = pd.merge(read_data2,read_data1)
+# df = df[df["gender"] == 1]
+#
+# f_buy_amount = df.groupby("category_1")["buy_mount"].sum()
+# # print(f_buy_amount)
+# plt.pie(f_buy_amount.values,labels = f_buy_amount.index, autopct='%1.1f%%')
+# plt.show()
 
 
 
