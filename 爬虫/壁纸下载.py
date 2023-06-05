@@ -44,6 +44,6 @@ for page_num in range(1,page_n+1):
             end = pic_link.split('.')[-1]
             # print(end)
             down_load = f'D:/文档/壁纸下载/{doc}/' + pic_name +'.' + end
-            print(down_load)
+            # print(down_load)
             with open(down_load,'wb') as y:
                 y.write(pic_link_down)
