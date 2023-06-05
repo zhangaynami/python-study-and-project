@@ -33,20 +33,3 @@ for i in range(1, 2):
             num_link = num_link.replace("200","960")
             print(num_link)
 
-            # image_url = num["data-src"]
-            # print(image_url)
-
-        # urls.append(image_url)
-# print(urls)
-
-#
-# folder_name = "meitui"
-# if not os.path.exists(folder_name):
-#     os.makedirs(folder_name)
-#
-# for i, url in enumerate(urls):
-#     response = requests.get(url,headers=headers)
-#     # print(response)
-#     file_name = os.path.join(folder_name, str(i+1) + "mz.jpg")
-#     with open(file_name, "wb") as f:
-#         f.write(response.content)

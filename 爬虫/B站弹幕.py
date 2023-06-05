@@ -16,7 +16,6 @@ headers = {
     "cookie": cookie,
 }
 
-
 def get_info(vid):
     url = f"https://api.bilibili.com/x/web-interface/view/detail?bvid={vid}"
     response = requests.get(url, headers=headers)
@@ -61,4 +60,5 @@ if __name__ == "__main__":
     danmu = get_danmu(info, start, end)
     with open("danmu1.txt", "w", encoding="utf-8") as fout:
         for dm in danmu:
+            print(dm)
             fout.write(dm + "\n")
