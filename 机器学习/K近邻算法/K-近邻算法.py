@@ -1,16 +1,10 @@
 # -*- codeing = utf-8 -*-
-import numpy as np
+path = "D:/机器学习/Machine-Learning-master/Machine-Learning-master/kNN/2.海伦约会/datingTestSet.txt"
 import operator
 
-#(1)准备数据集
-def createDataSet():
-    group = np.array([[1,101],[5,89],[108,5],[115,8]])
-    labels = ["爱情片","爱情片","动作片","动作片"]
-    return group,labels
+# -*- coding: UTF-8 -*-
+import numpy as np
 
-
-
-#(2)k-近邻算法
 """
 函数说明:kNN算法,分类器
 
@@ -23,28 +17,21 @@ Returns:
     sortedClassCount[0][0] - 分类结果
 
 Modify:
-    2017-07-13
+    2017-03-24
 """
 def classify0(inX, dataSet, labels, k):
     #numpy函数shape[0]返回dataSet的行数
     dataSetSize = dataSet.shape[0]
-    #在列向量方向上重复inX共1次(横向)，行向量方向上重复inX共dataSetSize次(纵向)
-    diffMat = np.tile(inX,(dataSetSize,1)) - dataSet
-    """
-    np.tile(inX, (dataSetSize, 1)) 的作用是将测试数据点 i
-    nX 在横向上重复 dataSetSize 次，纵向上重复1次，
-    得到一个新的矩阵。这个新的矩阵与数据集 dataSet 的形状相同，
-    用于计算测试数据点与数据集中每个数据点之间的差。
-    """
+    #在列向量方向上重复inX共1次(横向),行向量方向上重复inX共dataSetSize次(纵向)
+    diffMat = np.tile(inX, (dataSetSize, 1)) - dataSet
     #二维特征相减后平方
     sqDiffMat = diffMat**2
-    #sum()所有元素相加，sum(0)列相加，sum(1)行相加
+    #sum()所有元素相加,sum(0)列相加,sum(1)行相加
     sqDistances = sqDiffMat.sum(axis=1)
-    #开方，计算出距离
+    #开方,计算出距离
     distances = sqDistances**0.5
     #返回distances中元素从小到大排序后的索引值
     sortedDistIndices = distances.argsort()
-
     #定一个记录类别次数的字典
     classCount = {}
     for i in range(k):
@@ -57,18 +44,126 @@ def classify0(inX, dataSet, labels, k):
     #key=operator.itemgetter(1)根据字典的值进行排序
     #key=operator.itemgetter(0)根据字典的键进行排序
     #reverse降序排序字典
-    #classCount.items() 将字典 classCount 转换为由键值对元组组成的列表
-    #key=operator.itemgetter(1) 表示按照每个元组的第二个元素（即值）进行排序
     sortedClassCount = sorted(classCount.items(),key=operator.itemgetter(1),reverse=True)
     #返回次数最多的类别,即所要分类的类别
-
     return sortedClassCount[0][0]
 
 
-if __name__ == "__main__":
-    group,labels = createDataSet()
-    print(group)
-    print(labels)
-    test = [101,20]
-    test_class = classify0(test,group,labels,3)
-    print(test_class)
+"""
+函数说明:打开并解析文件，对数据进行分类：1代表不喜欢,2代表魅力一般,3代表极具魅力
+
+Parameters:
+    filename - 文件名
+Returns:
+    returnMat - 特征矩阵
+    classLabelVector - 分类Label向量
+
+Modify:
+    2017-03-24
+"""
+def file2matrix(filename):
+    #打开文件
+    fr = open(filename)
+    #读取文件所有内容
+    arrayOLines = fr.readlines()
+    #得到文件行数
+    numberOfLines = len(arrayOLines)
+    #返回的NumPy矩阵,解析完成的数据:numberOfLines行,3列
+    returnMat = np.zeros((numberOfLines,3))
+    #返回的分类标签向量
+    classLabelVector = []
+    #行的索引值
+    index = 0
+    for line in arrayOLines:
+        #s.strip(rm)，当rm空时,默认删除空白符(包括'\n','\r','\t',' ')
+        line = line.strip()
+        #使用s.split(str="",num=string,cout(str))将字符串根据'\t'分隔符进行切片。
+        listFromLine = line.split('\t')
+        #将数据前三列提取出来,存放到returnMat的NumPy矩阵中,也就是特征矩阵
+        returnMat[index,:] = listFromLine[0:3]
+        #根据文本中标记的喜欢的程度进行分类,1代表不喜欢,2代表魅力一般,3代表极具魅力
+        if listFromLine[-1] == 'didntLike':
+            classLabelVector.append(1)
+        elif listFromLine[-1] == 'smallDoses':
+            classLabelVector.append(2)
+        elif listFromLine[-1] == 'largeDoses':
+            classLabelVector.append(3)
+        index += 1
+    return returnMat, classLabelVector
+
+"""
+函数说明:对数据进行归一化
+
+Parameters:
+    dataSet - 特征矩阵
+Returns:
+    normDataSet - 归一化后的特征矩阵
+    ranges - 数据范围
+    minVals - 数据最小值
+
+Modify:
+    2017-03-24
+"""
+def autoNorm(dataSet):
+    #获得数据的最小值
+    minVals = dataSet.min(0)
+    maxVals = dataSet.max(0)
+    #最大值和最小值的范围
+    ranges = maxVals - minVals
+    #shape(dataSet)返回dataSet的矩阵行列数
+    normDataSet = np.zeros(np.shape(dataSet))
+    #返回dataSet的行数
+    m = dataSet.shape[0]
+    #原始值减去最小值
+    normDataSet = dataSet - np.tile(minVals, (m, 1))
+    #除以最大和最小值的差,得到归一化数据
+    normDataSet = normDataSet / np.tile(ranges, (m, 1))
+    #返回归一化数据结果,数据范围,最小值
+    return normDataSet, ranges, minVals
+
+"""
+函数说明:通过输入一个人的三维特征,进行分类输出
+
+Parameters:
+    无
+Returns:
+    无
+
+Modify:
+    2017-03-24
+"""
+def classifyPerson():
+    #输出结果
+    resultList = ['讨厌','有些喜欢','非常喜欢']
+    #三维特征用户输入
+    precentTats = float(input("玩视频游戏所耗时间百分比:"))
+    ffMiles = float(input("每年获得的飞行常客里程数:"))
+    iceCream = float(input("每周消费的冰激淋公升数:"))
+    #打开的文件名
+    filename = path
+    #打开并处理数据
+    datingDataMat, datingLabels = file2matrix(filename)
+    #训练集归一化
+    normMat, ranges, minVals = autoNorm(datingDataMat)
+    #生成NumPy数组,测试集
+    inArr = np.array([ffMiles, precentTats, iceCream])
+    #测试集归一化
+    norminArr = (inArr - minVals) / ranges
+    #返回分类结果
+    classifierResult = classify0(norminArr, normMat, datingLabels, 3)
+    #打印结果
+    print("你可能%s这个人" % (resultList[classifierResult-1]))
+
+"""
+函数说明:main函数
+
+Parameters:
+    无
+Returns:
+    无
+
+Modify:
+    2017-03-24
+"""
+if __name__ == '__main__':
+    classifyPerson()
