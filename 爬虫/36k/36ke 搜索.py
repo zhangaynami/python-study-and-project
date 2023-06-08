@@ -75,3 +75,4 @@ if __name__ == "__main__":
     driver = webdriver.Chrome(ChromeDriverManager().install())
     url = 'https://www.36kr.com'
     get_article_info(url,qusetion)
+    driver.close()
