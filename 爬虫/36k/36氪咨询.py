@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
-page_num = 3
+page_num = 2
 
 def get_article_info(url):
     driver.get(url)
@@ -31,9 +31,13 @@ def save_page(driver):
 
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     articles = soup.find_all('div', class_='kr-shadow-content')
+
     for article in articles:
+        # print(article)
         title = article.find("a",class_="article-item-title").get_text()
-        link = "https://www.36kr.com" + article.find("a")['href']
+        link = "https://www.36kr.com" + str(article.find("a",class_="article-item-pic").get("href"))
+        # link = article.find("a",class_="article-item-pic").get("href")
+        # print(link)
         summary = article.find("a",class_="article-item-description ellipsis-2").get_text()
 
         sheet.write(n, 0, n)
@@ -42,6 +46,7 @@ def save_page(driver):
         sheet.write(n, 3, summary)
         n = n + 1
     wb.save("36k_news.xls")
+    driver.close()
 
 def pages(driver,page_num):
     i = 1
