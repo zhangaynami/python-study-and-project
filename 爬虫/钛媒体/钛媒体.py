@@ -32,7 +32,7 @@ def save_page(driver):
         title = article.find("span",class_="title").get_text()
         news_t = article.find("span",class_="time").get_text()
         summary = article.find("span",class_="des").get_text()
-        # print(title)
+        print(title)
         # print(news_t)
         # print(summary)
         sheet.write(n, 0, n)
@@ -41,7 +41,7 @@ def save_page(driver):
         sheet.write(n, 3, summary)
 
         n = n + 1
-    wb.save("tmt_news.xls")
+    wb.save("钛媒体%stmt快讯.xls"%datetime.date.today())
 
 def pages(driver,page_num):
     today = datetime.date.today()
@@ -59,7 +59,7 @@ def pages(driver,page_num):
     confirm.click()
     i = 1
     while True:
-            if i <= 15:
+            if i <= 25:
                 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")  # 滚动到底
                 time.sleep(2)  # 等待页面加载
                 i += 1
@@ -69,9 +69,11 @@ def pages(driver,page_num):
 
 
 
-
-
+from selenium.webdriver.chrome.options import Options
 if __name__ == "__main__":
+    # chrome_options = Options()
+    # chrome_options.add_argument("--headless")
+
     driver = webdriver.Chrome(ChromeDriverManager().install())
     url = 'https://www.tmtpost.com/nictation'
     get_article_info(url)

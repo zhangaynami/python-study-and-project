@@ -1,6 +1,6 @@
 # -*- codeing = utf-8 -*-
+import datetime
 import time
-
 import xlwt
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -45,7 +45,7 @@ def save_page(driver):
         sheet.write(n, 2, link)
         sheet.write(n, 3, summary)
         n = n + 1
-    wb.save("36k_news.xls")
+    wb.save("36k咨询%s.xls"%datetime.date.today())
     driver.close()
 
 def pages(driver,page_num):
