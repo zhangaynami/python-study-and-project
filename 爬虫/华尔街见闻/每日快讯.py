@@ -1,18 +1,18 @@
 # -*- codeing = utf-8 -*-
 import datetime
-import time
-from selenium import webdriver
-from bs4 import BeautifulSoup
-import pandas as pd
-from webdriver_manager.chrome import ChromeDriverManager
 import os.path
-from selenium.webdriver.chrome.options import Options
+import time
 
-if os.path.exists('news.xlsx'):
-    os.remove('news.xlsx')
-if not os.path.isfile('news.xlsx'):
+import pandas as pd
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+
+if os.path.exists('华尔街见闻%s快讯.xlsx'%datetime.date.today()):
+    os.remove('华尔街见闻%s快讯.xlsx'%datetime.date.today())
+if not os.path.isfile('华尔街见闻%s快讯.xlsx'%datetime.date.today()):
     df = pd.DataFrame()
-    df.to_excel('news.xlsx', index=False)
+    df.to_excel('华尔街见闻%s快讯.xlsx'%datetime.date.today(), index=False)
 
 
 # 清空Excel文件中的数据
@@ -38,7 +38,7 @@ def save_page(driver,n):
         df = pd.read_excel('华尔街见闻%s快讯.xlsx'%datetime.date.today())
         data = pd.DataFrame(data)
         df = df.append(data, ignore_index=True)
-        df.to_excel('news.xlsx', index=False)
+        df.to_excel('华尔街见闻%s快讯.xlsx'%datetime.date.today(), index=False)
         n = n + 1
 
 def pages(driver):
@@ -73,12 +73,11 @@ def pages(driver):
         n += 20
 
 if __name__ == "__main__":
-    # chrome_options = Options()
-    # chrome_options.add_argument("--headless")
-
-    driver = webdriver.Chrome(ChromeDriverManager().install())
-
-    # driver = webdriver.Chrome()
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument("--window-size=1920,1080")
+    chrome_options.add_argument("--headless")
+    driver = webdriver.Chrome(ChromeDriverManager().install(),options=chrome_options)
+    #设置无头浏览器
     driver.implicitly_wait(15)
     url = 'https://wallstreetcn.com/live/global'
     get_article_info(url)
